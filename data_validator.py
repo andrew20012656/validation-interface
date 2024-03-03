@@ -49,8 +49,8 @@ class DataValidator:
         self.stats['basic_stats']['num_empty_files'] = num_empty_files
         self.stats['basic_stats']['num_empty_data_files'] = num_empty_data_files
         
-        print(f"{num_empty_files} files are empty")
-        print(f"{num_empty_data_files} files contain no data")
+        # print(f"{num_empty_files} files are empty")
+        # print(f"{num_empty_data_files} files contain no data")
         
     
     def analyze_history(self, timeline_objects_by_year, **kwargs):
@@ -63,11 +63,15 @@ class DataValidator:
         """
         min_num_of_unique_places_visited_per_month = kwargs.get('min_places_visited_per_month', 20)
         min_num_of_months_history = kwargs.get("min_month_history", 12)
+        self.stats['min_num_of_unique_places_visited_per_month'] = min_num_of_unique_places_visited_per_month
+        self.stats['min_num_of_months_history'] = min_num_of_months_history
+
         num_of_years = 0
         num_of_months = 0
 
         months_too_few_places_visited = []
         unique_rate_by_month = {}
+        num_of_unique_places_by_month = {}
         num_of_locations_in_CA = {}
         
         for year in timeline_objects_by_year:
@@ -93,6 +97,9 @@ class DataValidator:
                                     num_of_locations_in_CA_by_month += 1
                 # print(f"{month}: {len(places_visited_by_month)} unique places are visited")
                 unique_rate_by_month[month] = "{:.3%}".format(len(unique_places_visited_by_month) / total_num_places_visited) + f"     {len(unique_places_visited_by_month)} out of {total_num_places_visited} places visited"
+
+                num_of_unique_places_by_month[month] = len(unique_places_visited_by_month)
+
                 if (len(unique_places_visited_by_month) < min_num_of_unique_places_visited_per_month):
                     months_too_few_places_visited.append(month)
                 if num_of_locations_in_CA_by_month > 0:
@@ -100,17 +107,18 @@ class DataValidator:
                 
         self.stats['basic_stats']['num_of_years'] = num_of_years
         self.stats['basic_stats']['num_of_months'] = num_of_months
-        print("===============================================")
-        print(f"Number of years of history: {num_of_years}")
-        print(f"Number of months of history: {num_of_months}")
-        print("===============================================")
+        self.stats['num_of_unique_places_visited_by_month'] = num_of_unique_places_by_month
+        # print("===============================================")
+        # print(f"Number of years of history: {num_of_years}")
+        # print(f"Number of months of history: {num_of_months}")
+        # print("===============================================")
 
         self.stats['months_too_few_places_visited'] = months_too_few_places_visited
-        print(f"Month with too few unique places visited (< {min_num_of_unique_places_visited_per_month} places): {months_too_few_places_visited}")
-        print("===============================================")
-        print("Ratio of unique places visited per month")
-        pprint(unique_rate_by_month)
-        print("==============================================")
-        print("Months with location history in CA")
-        pprint(num_of_locations_in_CA)
+        # print(f"Month with too few unique places visited (< {min_num_of_unique_places_visited_per_month} places): {months_too_few_places_visited}")
+        # print("===============================================")
+        # print("Ratio of unique places visited per month")
+        # pprint(unique_rate_by_month)
+        # print("==============================================")
+        # print("Months with location history in CA")
+        # pprint(num_of_locations_in_CA)
         
