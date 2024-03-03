@@ -7,7 +7,7 @@ from location_anonymizer import *
 
 
 basic_stats = None
-input_file = 'data/data.json'
+input_file = os.path.join(os.path.dirname(os.path.dirname(sys.argv[1])), "google_map_data_stats.json")
 
 
 def load_basic_stats(input_file):
@@ -164,6 +164,7 @@ if __name__ == "__main__":
     input_dir = sys.argv[1]
     output_dir = sys.argv[2]
     participant = os.path.dirname(os.path.dirname(input_dir))
+    
 
     anonymizer = Anonymizer(input_dir, output_dir)
     anonymized_data_dir = anonymizer.anonymize_data()
@@ -181,5 +182,6 @@ if __name__ == "__main__":
             json.dump(data_validator.stats, open(output_file, "w"), indent=2)
         except json.JSONDecodeError:
             print("Error parsing JSON file")
+    
     
     app.run_server(debug=True)
