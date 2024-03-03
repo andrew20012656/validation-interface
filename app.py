@@ -163,6 +163,7 @@ def update_line_chart(selected_year):
 if __name__ == "__main__":
     input_dir = sys.argv[1]
     output_dir = sys.argv[2]
+    participant = os.path.dirname(os.path.dirname(input_dir))
 
     anonymizer = Anonymizer(input_dir, output_dir)
     anonymized_data_dir = anonymizer.anonymize_data()
@@ -174,8 +175,9 @@ if __name__ == "__main__":
         data_validator.load_history()
     
     if data_validator is not None:
-        output_file = './data/data.json'
+        output_file = os.path.join(participant, "google_map_data_stats.json")
         try:
+            print(f"Participant {participant}'s stats file is saved at {output_file}")
             json.dump(data_validator.stats, open(output_file, "w"), indent=2)
         except json.JSONDecodeError:
             print("Error parsing JSON file")
